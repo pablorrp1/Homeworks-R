@@ -1,0 +1,21 @@
+```{r}
+pesos_libras <- matrix(runif(25, min=160, max=200),ncol = 5)
+
+meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo")
+colnames(pesos_libras)<-meses
+
+personas <- c("Renata", "Hipócrates", "Celestino", "Oriana", "Alvin")
+rownames(pesos_libras) <- personas
+
+peso_promedio_persona <- rowMeans(pesos_libras)
+
+peso_promedio_mes <- colMeans(pesos_libras)
+
+pesos_promedio_persona <- cbind(pesos_libras, peso_promedio_persona)
+colnames(pesos_promedio_persona)[6] <- "Promedio por persona"
+pesos_con_totales <- rbind(pesos_promedio_persona, c(peso_promedio_mes, 0))
+rownames(pesos_con_totales)[6] <- "Promedio por mes"
+
+pesos_con_totales
+```
+
