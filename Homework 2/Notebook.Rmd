@@ -1,0 +1,130 @@
+# Función
+
+En R, una función es un conjunto de instrucciones que al invocarse se ejecutarán. Una función se define usando la palabra clave function, asignándose a un nombre que servirá para su invocación. Esta función puede o no contener parámetros de entrada, que serán identificadores internos para evaluarlos dentro de las instrucciones de la función en su ejecución.
+
+A continuación se presenta el cuerpo de la función que incluye los parámetros de entrada:
+
+```
+nombre_de_la_funcion <- function(parametro1, parametro2, ...) {
+  #cuerpo de la función, donde puede contener n cantidad de instrucciones
+  instruccion1
+  instruccion2
+  ...
+  return(resultado_funcion)
+}
+```
+Los elementos más importantes son:
+
+* nombre_de_la_funcion: es el nombre por el que se le llamará a la función para ejecutar las instrucciones contenidas en el cuerpo de la función.
+
+* parametro1, parametro2, ... : son los parámetros de entrada que aceptará la función. Éstos son identificadores para usarlos dentro del cuerpo de la función, para que al momento de ejecución se llenen con los valores.
+
+* return(resultado_funcion): es el valor que devolverá la función después de la ejecución de las instrucciones. Ésta instrucción especial puede existir o no dentro del cuerpo de la función.
+
+## Definición de una función
+Para crear una función se debe de seguir la estructura descrita. Para nombrar una función se debe de respetar que el inicio del nombre es un caracter alfabético y luego puede venir cualquier cantidad de caracteres alfanuméricos o guiones.
+
+Como buenas prácticas no debe de existir una función con nombre repetido o con nombre de una variable, debe de ser dedicada a ejecutar las instrucciones para la que se crea, entre otras.
+
+Por ejemplo, para crear una función que promedie tres números, se puede escribir así:
+```
+promedio_de_tres <- function(numero1, numero2, numero3){
+  suma <- numero1+numero2+numero3
+  promedio <- suma/3
+  return(promedio)
+}
+```
+
+## Argumentos de una función
+Un argumento es un valor que se pasa a una función cuando se llama. Un argumento es un valor que se utiliza como entrada para que la función realice una operación o cálculo específico. Los argumentos se especifican entre paréntesis después del nombre de la función. Para ejecutar la función, basta con llamarla por su nombre y enviar la cantidad de parámetros correcta. Para el siguiente ejemplo, se pasan como argumentos 1, 3 y 5.
+```
+promedio_de_tres(1,3,5)
+```
+
+### Pasar argumentos a la función
+Cuando se pasan argumentos a una función, puede pasarse de varias formas, entre las más comunes entre los lenguajes son por valor o por referencia.
+
+En el paso de argumentos por valor se crea una copia del valor original del argumento y se pasa la copia a la función en lugar del valor original; es decir que cualquier modificación que tenga que haga la función a ese argumento solo se realiza en la copia y no afectará al valor original. En R, todos los argumentos se pasan por esta forma.
+
+Cabe destacar que en R si se pasa un objeto, es decir una lista o un dataframe, éstos si son suceptibles a cambios realizados por la función, ya que se pasan por referencia. En el paso por referencia lo que se pasa es la dirección en memoria del objeto que se pasa como argumento, pudiendo modificar el valor original del argumento. Se puede lograr un comportamiento similar a este tipo usando el valor de asignación por referencia '<<-'.
+
+# Familia apply
+En R, esta familia incluye varias funciones que permiten aplicar una función a los elementos de un objeto. Son bastante útiles por que permiten aplicar de manera sencilla y eficiente una función a todos los elementos de un arreglo, lista, matriz o dataframe. También cabe destacar que son flexibles por permitir aplicar funciones definidas por el usuario.
+
+## lapply
+Es una función que se utiliza para aplicar una función a cada elemento de un objeto, de preferencia una lista, y devuelve una lista como resultado. La función lapply() se puede usar con cualquier función de R que tome un argumento y devuelva un resultado. Su sintaxis básica es:
+```
+lapply(nombre_lista, nombre_funcion)
+```
+
+### Características importantes
+* Siempre devuelve una lista, incluso si la entrada es una matriz, vector o data frame.
+* Si la entrada tiene longitud cero (sin elementos), devuelve una lista vacía.
+* Si la entrada tiene un elemento, devuelve una lista con un solo elemento, que es el resultado de aplicar la función a la entrada.
+* Si la entrada es una lista con varias entradas, devuelve una lista con un elemento para cada entrada, que es el resultado de aplicar la función a cada entrada.
+
+### Ejemplo
+```
+mi_lista <- list(a = 1:5, b = 6:10, c = 11:15)
+salida <- lapply(mi_lista, mean)
+salida
+```
+Esto imprimirá el resultado así:
+```
+$a
+[1] 3
+
+$b
+[1] 8
+
+$c
+[1] 13
+```
+
+## sapply
+Es una función que es similar a lapply, pero intenta simplificar el resultado si es posible. Si el resultado de lapply es una lista homogénea, sapply devuelve un vector en lugar de una lista. Su sintaxis básica es:
+```
+sapply(nombre_lista, nombre_funcion, simplify = TRUE, ...)
+```
+El argumento simplify se utiliza para especificar si se desea simplificar el resultado a un vector (valor predeterminado es TRUE). 
+
+### Características importantes
+* Si el resultado de la función es una lista heterogénea, es decir de un solo tipo de datos, devuelve una lista.
+* Si simplify = TRUE y el resultado de la función es un vector con una longitud igual para cada elemento de la entrada, devuelve una matriz o un array.
+* Si simplify = FALSE, siempre devuelve una lista.
+
+### Ejemplo
+```
+mi_lista <- list(a = 1:5, b = 6:10, c = 11:15)
+salida <- sapply(mi_lista, mean)
+salida
+```
+Esto imprimirá el resultado así:
+```
+a  b  c 
+3  8 13 
+```
+
+## vapply
+Es una función que es similar a sapply, pero el usuario debe especificar el tipo de datos de salida que espera para cada elemento de la lista. Esto puede ser útil cuando se trabaja con grandes conjuntos de datos y se requiere una mayor eficiencia en términos de memoria y tiempo de ejecución. Su sintaxis básica es:
+```
+vapply(nombre_lista, nombre_funcion, FUN.VALUE, ...)
+```
+El argumento FUN.VALUE es el tipo de datos que se espera que la función devuelva para cada elemento de la entrada.
+
+### Características importantes
+* Es más segura que sapply porque se debe especificar el tipo de datos de salida esperado, lo que garantiza que el resultado sea del tipo de datos deseado.
+* Puede ser más eficiente que sapply en términos de memoria y tiempo de ejecución cuando se trabaja con grandes conjuntos de datos.
+* Si el resultado de FUN no coincide con el tipo de datos especificado en FUN.VALUE, devuelve un error.
+
+### Ejemplo
+```
+mi_lista <- list(a = 1:5, b = 6:10, c = 11:15)
+salida <- vapply(mi_lista, mean, FUN.VALUE = numeric(1))
+salida
+```
+Esto imprimirá el resultado así:
+```
+a  b  c 
+3  8 13 
+```
