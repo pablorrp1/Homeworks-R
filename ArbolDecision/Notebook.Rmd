@@ -1,0 +1,18 @@
+Instalando librerías
+```{r}
+install.packages("rpart")
+install.packages("rpart.plot")
+library("rpart")
+library("rpart.plot")
+```
+
+Leyendo archivo y creando variable con los datos
+```{r}
+datacenso = read.csv("HOGAR_BDP.csv", sep = ",")
+```
+
+Árbol de decisión que determina 
+```{r}
+arbol <- rpart(DEPARTAMENTO ~ PCH4+PCH7, data=datacenso, method = "class")
+rpart.plot(arbol, type=2, extra = 0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", main="Hábitos de limpieza", cex = 0.45)
+```
